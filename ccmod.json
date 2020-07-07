@@ -1,0 +1,8 @@
+{
+	"id": "multiplayer",
+	"version": "0.0.7",
+	"poststart": "dist/mod.js",
+	"assets": [
+		"data/enemies/multiplayer.json"
+	]
+}

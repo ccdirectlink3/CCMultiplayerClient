@@ -1,6 +1,6 @@
 import { IConfigFile } from './configFile';
 import { IConnection } from './connection';
-import { SocketIoConnector } from './connectors/socketIOConnector';
+import { SocketIoConnector } from './connectors/SocketIOConnector';
 import { Multiplayer } from './multiplayer';
 import { IServer } from './server';
 
@@ -13,7 +13,7 @@ export class MultiplayerConfig {
         https: SocketIoConnector,
     };
 
-    private configPath = 'config/config.json';
+    private configPath = 'config.json';
 
     constructor(configPath?: string) {
         this.modPath = simplify.getMod('multiplayer').baseDirectory;
