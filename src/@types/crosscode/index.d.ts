@@ -337,6 +337,14 @@ declare namespace ig {
 
     }
 
+    class Image extends ig.Loadable {
+
+    }
+
+    class Font extends ig.Image {
+
+    }
+
     class EventCall extends ig.Class {
 
     }
