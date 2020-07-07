@@ -3,10 +3,19 @@ declare interface Vec2 {
     y: number;
 }
 
+declare namespace Vec2 {
+    function assign(a: Vec2, b: Vec2): Vec2;
+    function createC(x?: number, y?: number): Vec2;
+}
+
 declare interface Vec3 {
     x: number;
     y: number;
     z: number;
+}
+
+declare namespace Vec3 {
+    function createC(x?: number, y?: number, z?: number): Vec3;
 }
 
 declare interface SaveData {
@@ -96,12 +105,8 @@ declare namespace sc {
     }
 
     class ButtonGroup extends ig.Class {
-        public elements: ig.FocusGui[][];
         public pressCallbacks: Array<(element?: ig.FocusGui, mouseOver?: boolean) => void>;
         public selectionCallbacks: Array<(element?: ig.FocusGui) => void>;
-
-        public addPressCallback(cb: (element?: ig.FocusGui, mouseOver?: boolean) => void): void;
-        public addSelectionCallback(cb: (element?: ig.FocusGui) => void): void;
     }
 
     class ScrollPane extends ig.GuiElementBase {
@@ -119,13 +124,21 @@ declare namespace sc {
     }
 
     class BasicCombatant extends ig.ActorEntity {
-
+        public getCombatantRoot(): sc.BasicCombatant;
     }
 
     class ProxySpawnerBase extends ig.Class {
         public data: object;
 
-        public spawn(): void;
+        public spawn(x: number, y: number, z: number, entity: sc.BasicCombatant, dir: Vec2): void;
+    }
+
+    namespace ProxyTools {
+        function getProxy(src: sc.ProxySpawnerBase): sc.ProxySpawnerBase;
+        function getProxy(
+            src: string,
+            entity: { getCombatantRoot(): sc.BasicCombatant },
+        ): sc.ProxySpawnerBase;
     }
 
     class VerionChangeLog extends ig.SingleLoadable {
@@ -149,7 +162,6 @@ declare namespace ig {
     }
 
     class Game extends ig.Class {
-        public currentLoadingResource: string;
         public entities: ig.Entity[];
         public playerEntity: ig.ENTITY.Player;
 
@@ -166,7 +178,6 @@ declare namespace ig {
     }
 
     class TeleportPosition extends ig.Class {
-
         public static createFromJson(settings: {
             marker: string;
 
@@ -186,9 +197,6 @@ declare namespace ig {
             level?: number;
             baseZPos?: number;
         }): ig.TeleportPosition;
-        public marker: string | null;
-
-        constructor(marker?: string);
     }
 
     class GameAddon extends ig.Class {
@@ -199,12 +207,21 @@ declare namespace ig {
         public timer: number;
     }
 
-    class Entity extends ig.Class {
-        // prototype: typeof ig.Entity;
+    enum ENTITY_ALIGN {
+        BOTTOM = 1,
+        CENTER = 2,
+        TOP = 3,
+        FACE = 4,
+        BASE = 5,
+        WALL_HIT = 6,
+        FACE_BASE = 7,
+    }
 
+    class Entity extends ig.Class {
         public settings: object;
         public coll: CollEntry;
 
+        public getAlignedPos(alignment: ig.ENTITY_ALIGN, dest: Vec3): Vec3;
         public kill(unusedLevelChange?: boolean): void;
     }
 
@@ -215,6 +232,9 @@ declare namespace ig {
 
     class ActorEntity extends ig.AnimatedEntity {
         public face: Vec2;
+        public animationFixed: boolean;
+
+        public setAction(action: ActionData[], keepState?: boolean, noStateReset?: boolean): void;
     }
 
     namespace ENTITY {
@@ -223,6 +243,8 @@ declare namespace ig {
         }
         class Enemy extends ig.ENTITY.Combatant {
             public currentState: string;
+
+            public changeState(state: string, immediate?: boolean): void;
         }
         class Player extends sc.PlayerBaseEntity {
             public proxies: {[name: string]: sc.ProxySpawnerBase} | null;
@@ -264,10 +286,7 @@ declare namespace ig {
     }
 
     class InteractEntry extends ig.Class {
-        public isActive(): boolean;
-        public onConnect(): void;
-        public onDisconnect(): void;
-        public update(): void;
+
     }
 
     class ButtonInteractEntry extends ig.InteractEntry {
@@ -275,16 +294,9 @@ declare namespace ig {
     }
 
     class InteractManager extends ig.GameAddon {
-        public blockTimer: number;
         public entries: ig.InteractEntry[];
 
-        public deferredUpdateOrder: 0;
-
-        public addEntry(entry: ig.InteractEntry): void;
         public removeEntry(entry: ig.InteractEntry): void;
-        public setBlockDelay(delay?: number): void;
-        public isBlocked(): boolean;
-        public onDeferredUpdate(): void;
     }
 
     class Bgm extends ig.GameAddon {
@@ -297,7 +309,7 @@ declare namespace ig {
     }
 
     class GuiElementBase extends ig.Class {
-        public hook: ig.GuiHook;
+
     }
 
     class FocusGui extends ig.GuiElementBase {
@@ -309,8 +321,6 @@ declare namespace ig {
     }
 
     class System extends ig.Class {
-        public focusLost: boolean;
-
         public hasFocusLost(): boolean;
         public setFocusLost(): void;
         public regainFocus(): void;
@@ -318,7 +328,7 @@ declare namespace ig {
     }
 
     class SaveSlot extends ig.Class {
-        public data: SaveData;
+
     }
 
     class Cacheable extends ig.Class {
@@ -349,57 +359,6 @@ declare namespace ig {
 
     }
 
-    class StepBase extends ig.Class {
-
-    }
-
-    class EventStepBase extends ig.StepBase {} // TODO
-
-    namespace EVENT_STEP {
-        type EventEntitySelect = {player: true} | {self: true} | {name: string} | {party: string} | {varName: string};
-        class SET_ENEMY_STATE extends ig.EventStepBase {
-            constructor(settings: {
-                enemy: ig.ENTITY.Enemy | EventEntitySelect,
-                enemyState: string,
-            });
-            public start(unused?: undefined, call?: ig.EventCall): void;
-        }
-        class DO_ACTION extends ig.EventStepBase {
-            constructor(settings: {
-                entity: ig.Entity | EventEntitySelect,
-                action: ActionData[],
-                repeating?: boolean,
-                wait?: boolean,
-                keepState?: boolean,
-                immediately?: boolean,
-            })
-            public start(self: ig.EVENT_STEP.DO_ACTION, call?: ig.EventCall): void;
-            public run(self?: ig.EVENT_STEP.DO_ACTION): boolean;
-        }
-        class CLEAR_ANIMATION extends ig.EventStepBase {
-            constructor(settings: {
-                entity: ig.Entity | EventEntitySelect,
-            });
-            public start(unused?: undefined, self?: ig.EventCall): void;
-        }
-    }
-
-    class ActionStepBase extends ig.StepBase {} // TODO
-
-    namespace ACTION_STEP {
-        class SHOOT_PROXY extends ig.ActionStepBase {
-            constructor(settings: {
-                proxy: string | ProxyData | sc.ProxySpawnerBase,
-                offset?: Vec3,
-                align?: Vec2,
-                dir?: Vec2,
-                animAtTarget?: boolean,
-                posType?: 'SELF' | 'TARGET' | 'COLLAB_CENTER';
-            });
-            public run(entity: sc.BasicCombatant): true;
-        }
-    }
-
     enum PLATFORM_TYPES {
         UNKNOWN = 0,
         DESKTOP = 1,
@@ -407,45 +366,6 @@ declare namespace ig {
         MOBILE = 3,
         WIIU = 4,
     }
-
-    let BGM_SWITCH_MODE: {
-        IMMEDIATELY: {
-            fadeOut: 0,
-            fadeIn: 0,
-        },
-        FAST_OUT: {
-            fadeOut: 0.5,
-            fadeIn: 0,
-        },
-        MEDIUM_OUT: {
-            fadeOut: 1,
-            fadeIn: 0,
-        },
-        SLOW_OUT: {
-            fadeOut: 2,
-            fadeIn: 0,
-        },
-        VERY_SLOW_OUT: {
-            fadeOut: 5,
-            fadeIn: 0,
-        },
-        FAST: {
-            fadeOut: 0.5,
-            fadeIn: 0.5,
-        },
-        MEDIUM: {
-            fadeOut: 1,
-            fadeIn: 1,
-        },
-        SLOW: {
-            fadeOut: 2,
-            fadeIn: 2,
-        },
-        VERY_SLOW: {
-            fadeOut: 5,
-            fadeIn: 5,
-        },
-    };
 
     type BGM_SWITCH_MODE =
         'IMMEDIATELY'

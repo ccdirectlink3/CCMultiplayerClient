@@ -15,6 +15,6 @@ export class OnUpdateEntityStateListener {
         }
 
         this.main.entities[id].currentState = {protected: state} as unknown as string;
-        new ig.EVENT_STEP.SET_ENEMY_STATE({enemy: this.main.entities[id], enemyState: state}).start();
+        this.main.entities[id].changeState(state);
     }
 }

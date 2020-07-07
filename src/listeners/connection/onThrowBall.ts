@@ -1,6 +1,9 @@
 import { IBallInfo } from '../../ballInfo';
 import { Multiplayer } from '../../multiplayer';
 
+const tmpDirectionVec = Vec2.createC();
+const tmpPositionVec = Vec3.createC();
+
 export class OnThrownBallListener {
     constructor(
         private main: Multiplayer,
@@ -20,8 +23,19 @@ export class OnThrownBallListener {
             return;
         }
 
-        const actonStep = new ig.ACTION_STEP.SHOOT_PROXY({ proxy: ballInfo.ballInfo, dir: ballInfo.dir });
-        actonStep.run(entity as sc.BasicCombatant);
+        this.shootProxy(entity as sc.BasicCombatant, ballInfo.ballInfo, ballInfo.dir);
+
+    }
+
+    private shootProxy(combatant: sc.BasicCombatant, proxySrc: string, dir: Vec2): void {
+        const proxy = sc.ProxyTools.getProxy(proxySrc, combatant);
+        if (!proxy) {
+            return;
+        }
+
+        Vec2.assign(tmpDirectionVec, dir);
+        const { x, y, z } = combatant.getAlignedPos(ig.ENTITY_ALIGN.FACE, tmpPositionVec);
+        proxy.spawn(x, y, z, combatant, dir);
     }
 
     private resolveEntity(combatant: number | string | undefined): ig.Entity | undefined {

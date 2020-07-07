@@ -20,21 +20,14 @@ export class OnUpdateAnimationListener {
         }
     }
 
-    private clearAnimation(entity: ig.Entity): void {
-        new ig.EVENT_STEP.CLEAR_ANIMATION({entity}).start();
+    private clearAnimation(entity: ig.ActorEntity): void {
+        entity.animationFixed = false;
     }
 
-    private playAnimation(entity: ig.Entity, anim: string): void {
-        new ig.EVENT_STEP.DO_ACTION({
-            entity,
-            keepState: false,
-            action: [{
-                    type: 'SHOW_ANIMATION',
-                    anim,
-                }, {
-                    type: 'WAIT',
-                    time: -1,
-                }],
-        }).start({} as ig.EVENT_STEP.DO_ACTION);
+    private playAnimation(entity: ig.ActorEntity, anim: string): void {
+        entity.setAction([
+            { type: 'SHOW_ANIMATION', anim },
+            { type: 'WAIT', time: -1 },
+        ]);
     }
 }
