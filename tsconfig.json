@@ -13,6 +13,8 @@
     "forceConsistentCasingInFileNames": true
   },
   "include": [
-    "./src/"
+    "./src/",
+    "./node_modules/ultimate-crosscode-typedefs/modloader.d.ts",
+    "./node_modules/ultimate-crosscode-typedefs/modloader-stdlib.d.ts"
   ]
 }

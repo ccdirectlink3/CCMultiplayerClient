@@ -21,13 +21,13 @@ export class SocketIoConnector implements IConnection {
     }
 
     public load(): Promise<void> {
-        return simplify.loadScript(this.address + this.PATH);
+        return ccmod.resources.plain.loadScript(this.address + this.PATH);
     }
 
     public async open(hostname: string, port: number, type?: string): Promise<void> {
         this.socket = io(type + '://' + hostname + ':' + port + '/', {
-                transports: ['websocket'],
-            });
+            transports: ['websocket'],
+        });
 
         this.socket.on('reconnect', async () => {
             if (this.username && this.setHost) {

@@ -273,34 +273,49 @@ export class Multiplayer {
 
     private showLogin(): Promise<string> {
         return new Promise((resolve, reject) => {
-            const box = $('<div class="gameOverlayBox gamecodeMessage" ><h3>Multiplayer Login</h3></div>');
-            const form = $('<form><input type="text" name="username" placeholder="Username" /> \
-                            <input type="submit" name="send" value="Submit" /><form>');
-            box.append(form);
 
-            form.submit(() => {
-                const userInput = form[0].firstElementChild as HTMLInputElement;
+            const header = document.createElement('h3');
+            header.append('Multiplayer Login');
 
+            const userInput = document.createElement('input');
+            userInput.type = 'text';
+            userInput.name = 'username';
+            userInput.placeholder = 'Username';
+
+            const submitInput = document.createElement('input');
+            submitInput.type = 'submit';
+            submitInput.name = 'send';
+            submitInput.value = 'Submit';
+
+            const form = document.createElement('form');
+            form.append(userInput, submitInput);
+
+            const box = document.createElement('div');
+            box.classList.add('gameOverlayBox', 'gamecodeMessage');
+            box.append(header, form);
+
+            form.addEventListener('submit', () => {
                 const name = userInput.value;
-                if (!name || name === '') {
+                if (!name) {
                     reject(name);
+                } else {
+                    resolve(name);
                 }
 
                 ig.system.regainFocus();
-                resolve(name);
 
                 return false;
             });
 
-            $(document.body).append(box);
-            box.addClass('shown');
+            document.body.append(box);
+            box.classList.add('shown');
             ig.system.setFocusLost();
 
             ig.system.addFocusListener((_) => {
                 box.remove();
             });
 
-            form.find('input[type=text]').focus();
+            userInput.focus();
         });
     }
 

@@ -1,3 +1,7 @@
+declare namespace simplify {
+    function registerUpdate(func: () => void): void;
+}
+
 declare interface Vec2 {
     x: number;
     y: number;

@@ -16,18 +16,13 @@ export class MultiplayerConfig {
     private configPath = 'config.json';
 
     constructor(configPath?: string) {
-        this.modPath = simplify.getMod('multiplayer').baseDirectory;
+        this.modPath = modloader.loadedMods.get('multiplayer')!.baseDirectory;
         this.configPath = this.modPath + (configPath || this.configPath);
     }
 
     public async load(): Promise<void> {
-        await new Promise<void>((resolve, rejected) => {
-            simplify.resources.loadJSON(this.configPath, (data: IConfigFile) => {
-                this.servers = data.servers;
-
-                resolve();
-            });
-        });
+        const { servers } = await ccmod.resources.loadJSON<IConfigFile>('/' + this.configPath);
+        this.servers = servers;
     }
 
     public getConnection(main: Multiplayer, index: number): IConnection {

@@ -11,14 +11,10 @@
   },
   "author": "CCDirectLink",
   "devDependencies": {
-    "@types/jquery": "^3.3.29",
-    "@types/node": "^11.13.11",
-    "@types/seedrandom": "^2.4.28",
     "@types/socket.io-client": "^1.4.32",
     "tslint": "^5.16.0",
-    "typescript": "^3.9.6"
+    "typescript": "^3.9.6",
+    "ultimate-crosscode-typedefs": "github:dmitmel/ultimate-crosscode-typedefs"
   },
-  "dependencies": {
-    "seedrandom": "^3.0.1"
-  }
+  "dependencies": {}
 }

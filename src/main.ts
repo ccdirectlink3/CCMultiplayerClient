@@ -2,8 +2,6 @@ import { Multiplayer } from './multiplayer.js';
 
 async function startMultiplayer(): Promise<void> {
     try {
-        await waitForMods();
-
         const multiplayer = new Multiplayer();
 
         console.log('[multiplayer] Loading..');
@@ -18,14 +16,6 @@ async function startMultiplayer(): Promise<void> {
     } catch (e) {
         console.error(e);
     }
-}
-
-async function waitForMods(): Promise<void> {
-    await new Promise((resolve, reject) => {
-        document.body.addEventListener('modsLoaded', () => {
-            resolve();
-        });
-    });
 }
 
 startMultiplayer()
