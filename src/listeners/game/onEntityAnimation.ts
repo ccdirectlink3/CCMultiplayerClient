@@ -1,6 +1,6 @@
-import { IMultiplayerEntity } from '../../mpEntity';
-import { Multiplayer } from '../../multiplayer';
-import { EntityListener } from './entityListener';
+import { IMultiplayerEntity } from '../../mpEntity.js';
+import { Multiplayer } from '../../multiplayer.js';
+import { EntityListener } from './entityListener.js';
 
 export class OnEntityAnimationListener {
 

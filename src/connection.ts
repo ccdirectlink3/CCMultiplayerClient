@@ -1,4 +1,4 @@
-import { IBallInfo } from './ballInfo';
+import { IBallInfo } from './ballInfo.js';
 
 export interface IConnection {
     load(): Promise<void>;

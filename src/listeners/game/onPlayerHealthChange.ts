@@ -1,7 +1,7 @@
-import { IMultiplayerEntity } from '../../mpEntity';
-import { Multiplayer } from '../../multiplayer';
-import { EntityListener } from './entityListener';
-import { PlayerListener } from './playerListener';
+import { IMultiplayerEntity } from '../../mpEntity.js';
+import { Multiplayer } from '../../multiplayer.js';
+import { EntityListener } from './entityListener.js';
+import { PlayerListener } from './playerListener.js';
 
 export class OnPlayerHealthChangeListener {
     private last = 0;

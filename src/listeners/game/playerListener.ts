@@ -1,4 +1,4 @@
-import { Multiplayer } from '../../multiplayer';
+import { Multiplayer } from '../../multiplayer.js';
 
 export class PlayerListener {
     private children: Array<(player: ig.ENTITY.Player) => any> = [];

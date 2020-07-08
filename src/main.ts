@@ -1,4 +1,4 @@
-import { Multiplayer } from './multiplayer';
+import { Multiplayer } from './multiplayer.js';
 
 async function startMultiplayer(): Promise<void> {
     try {

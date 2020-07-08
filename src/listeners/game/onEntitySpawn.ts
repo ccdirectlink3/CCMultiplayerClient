@@ -1,6 +1,6 @@
-import { IBallInfo } from '../../ballInfo';
-import { IMultiplayerEntity } from '../../mpEntity';
-import { Multiplayer } from '../../multiplayer';
+import { IBallInfo } from '../../ballInfo.js';
+import { IMultiplayerEntity } from '../../mpEntity.js';
+import { Multiplayer } from '../../multiplayer.js';
 
 export class OnEntitySpawnListener {
     private unknownEntities: Array<string | typeof ig.Entity> = [];

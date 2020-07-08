@@ -1,5 +1,5 @@
-import { IBallInfo } from '../../ballInfo';
-import { Multiplayer } from '../../multiplayer';
+import { IBallInfo } from '../../ballInfo.js';
+import { Multiplayer } from '../../multiplayer.js';
 
 const tmpDirectionVec = Vec2.createC();
 const tmpPositionVec = Vec3.createC();

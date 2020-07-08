@@ -1,8 +1,8 @@
-import { IConfigFile } from './configFile';
-import { IConnection } from './connection';
-import { SocketIoConnector } from './connectors/SocketIOConnector';
-import { Multiplayer } from './multiplayer';
-import { IServer } from './server';
+import { IConfigFile } from './configFile.js';
+import { IConnection } from './connection.js';
+import { SocketIoConnector } from './connectors/SocketIOConnector.js';
+import { Multiplayer } from './multiplayer.js';
+import { IServer } from './server.js';
 
 export class MultiplayerConfig {
     public modPath: string;

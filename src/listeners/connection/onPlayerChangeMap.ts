@@ -1,6 +1,6 @@
-import { IMultiplayerEntity } from '../../mpEntity';
-import { Multiplayer } from '../../multiplayer';
-import { IPlayer } from '../../player';
+import { IMultiplayerEntity } from '../../mpEntity.js';
+import { Multiplayer } from '../../multiplayer.js';
+import { IPlayer } from '../../player.js';
 
 export class OnPlayerChangeMapListener {
     private cb?: () => void;

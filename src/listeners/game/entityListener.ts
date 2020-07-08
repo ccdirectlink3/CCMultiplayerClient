@@ -1,5 +1,5 @@
-import { IMultiplayerEntity } from '../../mpEntity';
-import { Multiplayer } from '../../multiplayer';
+import { IMultiplayerEntity } from '../../mpEntity.js';
+import { Multiplayer } from '../../multiplayer.js';
 
 export class EntityListener {
     private children: Array<(entity: IMultiplayerEntity) => any> = [];

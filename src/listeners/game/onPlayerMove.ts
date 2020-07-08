@@ -1,5 +1,5 @@
-import { Multiplayer } from '../../multiplayer';
-import { PlayerListener } from './playerListener';
+import { Multiplayer } from '../../multiplayer.js';
+import { PlayerListener } from './playerListener.js';
 
 export class OnPlayerMoveListener {
 

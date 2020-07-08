@@ -1,7 +1,7 @@
-import { IBallInfo } from '../ballInfo';
-import { IConnection } from '../connection';
-import { Multiplayer } from '../multiplayer';
-import { IServer } from '../server';
+import { IBallInfo } from '../ballInfo.js';
+import { IConnection } from '../connection.js';
+import { Multiplayer } from '../multiplayer.js';
+import { IServer } from '../server.js';
 
 export class SocketIoConnector implements IConnection {
     private readonly PATH = 'socket.io/socket.io.js';

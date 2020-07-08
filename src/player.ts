@@ -1,4 +1,4 @@
-import { IMultiplayerEntity } from './mpEntity';
+import { IMultiplayerEntity } from './mpEntity.js';
 
 export interface IPlayer {
     name: string;
