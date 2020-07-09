@@ -97,7 +97,7 @@
         }
     },
     "states": {
-        "DEFAULT": { 
+        "DEFAULT": {
             "choices": []
         }
     },
