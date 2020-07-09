@@ -1,23 +1,21 @@
 import { Multiplayer } from '../../multiplayer.js';
 
 export class PlayerListener {
-    private children: Array<(player: ig.ENTITY.Player) => any> = [];
+    private children: Array<(player: ig.ENTITY.Player) => void> = [];
 
     constructor(
         private main: Multiplayer,
     ) { }
 
     public register(): void {
-        simplify.registerUpdate(() => {
-            this.onUpdate(); // Added a lambda to avoid context weirdness
-        });
+        ig.game.addons.postUpdate.push(this);
     }
 
-    public addChild(child: (player: ig.ENTITY.Player) => any) {
+    public addChild(child: (player: ig.ENTITY.Player) => void) {
         this.children.push(child);
     }
 
-    public onUpdate(): void {
+    public onPostUpdate(): void {
         const player = ig.game.playerEntity;
 
         if (player && !this.main.loadingMap) {

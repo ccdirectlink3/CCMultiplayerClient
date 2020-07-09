@@ -7,7 +7,7 @@ export class LoadScreenHook {
 
                 this.clearHandlers(box);
                 this.addHandler(box, (button: sc.SaveSlotButton) => {
-                    resolve(servers.indexOf(button.autoSlotMiss.text));
+                    resolve(servers.indexOf(button.autoSlotMiss.text as string));
                 });
 
                 for (let i = 0; i < servers.length; i++) {
@@ -16,7 +16,7 @@ export class LoadScreenHook {
             }.bind(this));
 
             loadMenu();
-        }) ;
+        });
     }
 
     public hook(callback: (box: sc.ButtonListBox) => void): void {

@@ -7,24 +7,14 @@ export class OnTeleportListener {
     ) { }
 
     public register(): void {
-        const instance = this;
-        const original = ig.game.teleport;
-        ig.game.teleport = function(this: ig.Game, map: string, teleportPosition: any, hint: string) {
-            instance.onTeleport(map, teleportPosition, hint);
-            return original.call(this, map, teleportPosition, hint);
-        };
+        ig.game.addons.teleport.push(this);
     }
 
-    public onTeleport(map: string, teleportPosition: any, hint: string): void {
+    public onTeleport(map: string, teleportPosition?: ig.TeleportPosition | null): void {
         this.main.loadingMap = true;
-
-        for (const key in teleportPosition) {
-            if (teleportPosition[key] && teleportPosition[key].constructor === String) {
-                const marker: string = teleportPosition[key];
-                this.main.connection.changeMap(map, marker);
-                return;
-            }
-        }
-        this.main.connection.changeMap(map, null);
+        this.main.connection.changeMap(
+            map,
+            (teleportPosition && teleportPosition.marker) || null,
+        );
     }
 }

@@ -59,8 +59,8 @@ export class OnPlayerChangeMapListener {
     private registerLoadCompleteHandler(): void {
         const instance = this;
         ig.Game.inject({
-            loadingComplete(this: any): void {
-                this.parent();
+            loadingComplete(...args) {
+                this.parent(...args);
                 if (instance.cb) {
                     instance.cb.call(instance);
                     instance.cb = undefined;

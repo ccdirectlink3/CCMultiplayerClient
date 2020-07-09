@@ -10,7 +10,7 @@ export class OnEntitySpawnListener {
                                              y: number,
                                              z: number,
                                              settings: any,
-                                             showAppearEffects?: boolean) => T;
+                                             ...args: any[]) => T;
 
     constructor(
         private main: Multiplayer,
@@ -23,11 +23,11 @@ export class OnEntitySpawnListener {
                                                     y: number,
                                                     z: number,
                                                     settings: any,
-                                                    showAppearEffects?: boolean) => {
+                                                    ...args: any[]) => {
             if (settings && settings.skipHook) {
-                return this.original.call(ig.game, type, x, y, z, settings, showAppearEffects) as T;
+                return this.original.call(ig.game, type, x, y, z, settings, ...args) as T;
             }
-            return this.onEntitySpawned(type as string | typeof ig.Entity, x, y, z, settings, showAppearEffects) as T;
+            return this.onEntitySpawned(type as string | typeof ig.Entity, x, y, z, settings, ...args) as T;
         };
     }
 
@@ -36,26 +36,26 @@ export class OnEntitySpawnListener {
                            y: number,
                            z: number,
                            settings: any,
-                           showAppearEffects?: boolean): ig.Entity {
+                           ...args: any[]): ig.Entity {
         const blacklist: Array<string | typeof ig.Entity> = [
             'Marker',
             'HiddenBlock',
-            ig.ENTITY.Player,
-            ig.ENTITY.Crosshair,
-            ig.ENTITY.CrosshairDot,
-            ig.ENTITY.OffsetParticle,
-            ig.ENTITY.RhombusParticle,
-            ig.ENTITY.HiddenSkyBlock,
-            ig.ENTITY.Effect,
-            ig.ENTITY.Particle,
-            ig.ENTITY.CopyParticle,
+            ig.ENTITY.Player as any,
+            ig.ENTITY.Crosshair as any,
+            ig.ENTITY.CrosshairDot as any,
+            ig.ENTITY.OffsetParticle as any,
+            ig.ENTITY.RhombusParticle as any,
+            ig.ENTITY.HiddenSkyBlock as any,
+            ig.ENTITY.Effect as any,
+            ig.ENTITY.Particle as any,
+            ig.ENTITY.CopyParticle as any,
         ];  // Static objects that never change or objects that should never be synced
 
         if (blacklist.indexOf(type) >= 0) {
-            return this.original.call(ig.game, type, x, y, z, settings, showAppearEffects);
+            return this.original.call(ig.game, type, x, y, z, settings, ...args);
         }
 
-        if (typeof type !== 'string' && type.prototype === ig.ENTITY.Ball.prototype) {
+        if (typeof type !== 'string' && type.prototype === (ig.ENTITY.Ball as any).prototype) {
             const ballSettings = this.filterBall(settings);
             if (ballSettings) {
                 if (typeof ballSettings.combatant !== 'string'
@@ -65,10 +65,10 @@ export class OnEntitySpawnListener {
             } else {
                 console.warn('Could not find type of ball. Maybe something else threw the ball?');
             }
-            return this.original.call(ig.game, type, x, y, z, settings, showAppearEffects);
+            return this.original.call(ig.game, type, x, y, z, settings, ...args);
         }
 
-        const entity = this.original.call(ig.game, type, x, y, z, settings, showAppearEffects) as IMultiplayerEntity;
+        const entity = this.original.call(ig.game, type, x, y, z, settings, ...args) as IMultiplayerEntity;
 
         const realType = this.findEntityType(type);
         if (realType === undefined) {
@@ -134,7 +134,7 @@ export class OnEntitySpawnListener {
 
         for (const name in proxies) {
             if (proxies.hasOwnProperty(name)) {
-                const proxy = proxies[name];
+                const proxy = proxies[name] as sc.BallInfo | undefined;
                 if (proxy !== undefined && proxy.data === settings.ballInfo) {
                     return {
                         ballInfo: name,

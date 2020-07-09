@@ -2,23 +2,21 @@ import { IMultiplayerEntity } from '../../mpEntity.js';
 import { Multiplayer } from '../../multiplayer.js';
 
 export class EntityListener {
-    private children: Array<(entity: IMultiplayerEntity) => any> = [];
+    private children: Array<(entity: IMultiplayerEntity) => void> = [];
 
     constructor(
         private main: Multiplayer,
     ) { }
 
     public register(): void {
-        simplify.registerUpdate(() => {
-            this.onUpdate(); // Added a lambda to avoid context weirdness
-        });
+        ig.game.addons.postUpdate.push(this);
     }
 
-    public addChild(child: (entity: IMultiplayerEntity) => any) {
+    public addChild(child: (entity: IMultiplayerEntity) => void) {
         this.children.push(child);
     }
 
-    public onUpdate(): void {
+    public onPostUpdate(): void {
         const entities = ig.game.entities;
         for (let i = 0; i < entities.length; i++) {
             const entity = ig.game.entities[i];

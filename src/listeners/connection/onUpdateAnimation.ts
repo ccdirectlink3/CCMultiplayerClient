@@ -25,9 +25,9 @@ export class OnUpdateAnimationListener {
     }
 
     private playAnimation(entity: ig.ActorEntity, anim: string): void {
-        entity.setAction([
+        entity.setAction(new ig.Action('[GENERIC]', [
             { type: 'SHOW_ANIMATION', anim },
             { type: 'WAIT', time: -1 },
-        ]);
+        ]));
     }
 }

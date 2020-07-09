@@ -1,5 +1,12 @@
 import { Multiplayer } from '../../multiplayer.js';
 
+interface MapData {
+    entities: Array<{
+        type: string;
+        settings: any;
+    }>;
+}
+
 export class OnMapEnterListener {
     constructor(
         private main: Multiplayer,
@@ -7,9 +14,9 @@ export class OnMapEnterListener {
 
     public register(): void {
         const originalLoad = ig.game.loadLevel;
-        ig.game.loadLevel = (data: MapData) => {
-            this.onMapEnter(data);
-            const result = originalLoad.call(ig.game, data);
+        ig.game.loadLevel = (...args) => {
+            this.onMapEnter(args[0]);
+            const result = originalLoad.call(ig.game, ...args);
             this.main.loadingMap = false;
             return result;
         };
